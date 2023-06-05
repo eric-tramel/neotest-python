@@ -32,7 +32,12 @@ function M.get_python_command(root)
   if vim.env.VIRTUAL_ENV then
     python_command_mem[root] = { Path:new(vim.env.VIRTUAL_ENV, "bin", "python").filename }
     return python_command_mem[root]
+  else
+    if vim.env.CONDA_PREFIX then
+    python_command_mem[root] = { Path:new(vim.env.CONDA_PREFIX, "bin", "python").filename }
+    return python_command_mem[root]
   end
+  -- 
 
   for _, pattern in ipairs({ "*", ".*" }) do
     local match = async.fn.glob(Path:new(root or async.fn.getcwd(), pattern, "pyvenv.cfg").filename)
